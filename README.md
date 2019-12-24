@@ -10,7 +10,9 @@
   - GetRecentItem
   - GetBrandCount
   - GetItemsbyColor
-  
+ 
+**Note : Please add the required paramter in the params options**
+
 * GetRecentItem - This API returns the latest record for the given date
 
 ```

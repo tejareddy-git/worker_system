@@ -1,4 +1,5 @@
 import json
+import redis
 import worker_system.settings as settings
 from django.http import HttpResponse
 from pyspark.context import SparkContext
@@ -11,6 +12,7 @@ class Store:
         """ initialize the data from the resource """
 
         self.data_frame = self.get_resource_data()
+        self.post_data_to_redis()
 
     def get_resource_data(self):
         """ Fetch the required data from resource file """
@@ -30,6 +32,18 @@ class Store:
         date_field = "%{}%".format(current_date)
         recent_items = data_df.filter(data_df.dateAdded.like(date_field))
         return recent_items
+
+    def post_data_to_redis(self):
+        """ post each record to redis """
+
+        R_HOST = settings.R_HOST
+        R_PORT = settings.R_PORT
+        R_PASSWORD = settings.R_PASSWORD
+        r_conn = redis.StrictRedis(\
+            host=R_HOST, port=R_PORT, password=R_PASSWORD, decode_responses=True\
+            )
+        data_df = self.data_frame.toJSON().collect()
+        [r_conn.lpush('shoes', item) for item in data_df]
 
 class GetRecentItem(APIView):
     """ Return the latest item for the given date """

@@ -123,3 +123,7 @@ STATIC_URL = '/static/'
 
 PATH = "/home/aspire/Desktop/ML/kaggle/womens-shoes-prices/Datafiniti_Womens_Shoes.csv"
 COLUMNS = ["id", "brand", "colors", "dateAdded"]
+
+R_HOST = "localhost"
+R_PORT = 6379
+R_PASSWORD = ""
